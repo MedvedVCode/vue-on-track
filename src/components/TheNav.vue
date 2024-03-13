@@ -1,6 +1,6 @@
 <script setup>
 import { NAV_ITEMS } from '@/constants'
-import { isPageValid } from '@/functions'
+import { isPageValid } from '@/validators'
 
 import NavItem from '@/components/NavItem.vue'
 
@@ -12,7 +12,7 @@ defineProps({
   }
 })
 
-const emit = defineEmits(['navigate'])
+const emit = defineEmits({ navigate: isPageValid })
 </script>
 
 <template>
