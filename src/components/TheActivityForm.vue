@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
 import { isActivityValid } from '@/validators'
 
 import { PlusIcon } from '@heroicons/vue/24/outline'
@@ -9,9 +9,11 @@ const emit = defineEmits({ submit: isActivityValid })
 
 const activity = ref('')
 
-function submit() {
+async function submit() {
   emit('submit', activity.value)
   activity.value = ''
+  await nextTick()
+  window.scrollTo(0, document.body.scrollHeight)
 }
 </script>
 <template>
@@ -22,7 +24,7 @@ function submit() {
       class="w-full rounded p-4 border text-xl"
       placeholder="Add an activity"
     />
-    <BaseButton>
+    <BaseButton :disabled="activity.trim() === ''">
       <PlusIcon class="h-8" />
     </BaseButton>
   </form>

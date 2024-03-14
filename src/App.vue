@@ -33,7 +33,7 @@ const deleteActivity = (activity) => {
 <template>
   <TheHeader @navigate="goTo($event)" />
 
-  <main class="flex flex-grow flex-col">
+  <main class="flex grow flex-col">
     <TheTimeline
       v-show="currentPage === PAGE_TIMELINE"
       :timeline-items="timelineItems"
