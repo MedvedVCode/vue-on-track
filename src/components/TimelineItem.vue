@@ -1,42 +1,33 @@
 <script setup>
-import { isTimelineItemValid } from '@/validators'
-import BaseSelect from './BaseSelect.vue'
+import { ref } from 'vue'
+import { isTimelineItemValid, validateSelectOptions } from '@/validators'
 
-const props = defineProps({
+import BaseSelect from './BaseSelect.vue'
+import TimelineHour from './TimelineHour.vue'
+
+defineProps({
   timelineItem: {
     type: Object,
     required: true,
     validator: isTimelineItemValid
+  },
+  activitySelectOptions: {
+    required: true,
+    type: Array,
+    validator: validateSelectOptions
   }
 })
 
-const hourLinkClasses = [
-  'absolute -top-4 left-1/2 -translate-x-1/2 rounded px-2 font-mono text-lg',
-  props.timelineItem.hour === new Date().getHours()
-    ? 'bg-purple-900 font-black text-white'
-    : 'bg-gray-100 text-gray-500'
-]
-
-const options = [
-  {
-    value: 1,
-    label: 'Coding'
-  },
-  {
-    value: 2,
-    label: 'Reading'
-  },
-  {
-    value: 3,
-    label: 'Training'
-  }
-]
-
-const selectActivityId = 2
+const selectActivityId = ref(0)
 </script>
 <template>
   <li class="relative flex flex-col gap-2 border-t border-gray-200 py-10 px-4">
-    <a href="#" :class="hourLinkClasses">{{ timelineItem.hour }}:00 </a>
-    <BaseSelect :selected="selectActivityId" :options="options" placeholder="Rest" />
+    <TimelineHour :hour="timelineItem.hour" />
+    <BaseSelect
+      :selected="selectActivityId"
+      :options="activitySelectOptions"
+      placeholder="Rest"
+      @select="selectActivityId = $event"
+    />
   </li>
 </template>
