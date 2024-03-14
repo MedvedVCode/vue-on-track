@@ -4,7 +4,8 @@ import { PAGE_TIMELINE, PAGE_ACTIVITIES, PAGE_PROGRESS } from '@/constants'
 import {
   normalizePageHash,
   generateTimelineItems,
-  generateActivitySelectOptions
+  generateActivitySelectOptions,
+  generateActivities
 } from './functions'
 
 import TheHeader from './components/TheHeader.vue'
@@ -15,10 +16,9 @@ import TheTimeline from './pages/TheTimeline.vue'
 
 const currentPage = ref(normalizePageHash())
 const timelineItems = generateTimelineItems()
+const activities = ref(generateActivities())
 
 const goTo = (page) => (currentPage.value = page)
-
-const activities = ref(['Coding', 'Reading', 'Training'])
 
 const activitySelectOptions = generateActivitySelectOptions(activities.value)
 
