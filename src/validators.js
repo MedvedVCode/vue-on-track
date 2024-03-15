@@ -12,6 +12,10 @@ export function isHourValid(hour) {
   return isNumber(hour) && isBetween(hour, MIDNIGHT_HOUR, HOURS_IN_DAY - 1)
 }
 
+export function isSelectValueValid(value) {
+  return isNumberOrNull(value) || isNotEmptyString(value)
+}
+
 export function validateSelectOptions(options) {
   return options.every(isSelectOptionValid)
 }
@@ -32,11 +36,11 @@ export function isNumberOrNull(value) {
   return isNumber(value) || isNull(value)
 }
 
-const isNull = (value) => value === null
+export const isNull = (value) => value === null
 
 export const isUndefined = (value) => value === undefined
 
-const isNumber = (value) => typeof value === 'number'
+export const isNumber = (value) => typeof value === 'number'
 
 const isString = (value) => typeof value === 'string'
 
@@ -47,6 +51,7 @@ export function validateActivities(array) {
 }
 
 export function isActivityValid({ id, name, secondsToComplete }) {
+  if (isNull(id)) return true
   return [isNotEmptyString(id), isNotEmptyString(name), isNumber(secondsToComplete)].every(Boolean)
 }
 

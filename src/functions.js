@@ -1,5 +1,12 @@
-import { PAGE_TIMELINE, HOURS_IN_DAY, MIDNIGHT_HOUR, SECONDS_IN_HOUR } from '@/constants'
-import { isPageValid } from './validators'
+import {
+  PAGE_TIMELINE,
+  HOURS_IN_DAY,
+  SECONDS_IN_HOUR,
+  SECONDS_IN_MINUTE,
+  MINUTES_IN_HOUR,
+  MILLISECONDS_IN_SECOND
+} from '@/constants'
+import { isPageValid, isNull } from './validators'
 
 export const normalizePageHash = () => {
   const page = window.location.hash.slice(1)
@@ -8,18 +15,18 @@ export const normalizePageHash = () => {
   return PAGE_TIMELINE
 }
 
-export function generateTimelineItems() {
-  const timelineItems = []
-
-  for (let hour = MIDNIGHT_HOUR; hour < HOURS_IN_DAY; hour++) {
-    timelineItems.push({ hour })
-  }
-  return timelineItems
+export function generateTimelineItems(activities) {
+  return [...Array(HOURS_IN_DAY).keys()].map((hour) => ({
+    hour,
+    activityId: hour % 4 === 0 ? null : activities[hour % 2].id,
+    activitySeconds: hour % 4 === 0 ? 0 : (15 * SECONDS_IN_MINUTE * hour) % SECONDS_IN_HOUR
+  }))
 }
 
 export function generateActivitySelectOptions(activities) {
   return activities.map((activity) => ({ label: activity.name, value: activity.id }))
 }
+
 export function generateActivities() {
   return ['Coding', 'Training', 'Reading'].map((name, hours) => ({
     id: id(),
@@ -30,4 +37,30 @@ export function generateActivities() {
 
 export function id() {
   return Date.now().toString(36) + Math.random().toString(36).substring(2)
+}
+
+export function normalizaSelectValue(value) {
+  return isNull(value) || isNaN(value) ? value : +value
+}
+
+export function generatePeriodSelectOptions(periodsInMinutes) {
+  return periodsInMinutes.map((minutes) => ({
+    value: minutes * SECONDS_IN_MINUTE,
+    label: generatePeriodSelectOptionsLabel(minutes)
+  }))
+}
+
+function generatePeriodSelectOptionsLabel(minutes) {
+  const hours = Math.floor(minutes / MINUTES_IN_HOUR)
+    .toString()
+    .padStart(2, '0')
+  const remainingMinutes = (minutes % MINUTES_IN_HOUR).toString().padStart(2, '0')
+  return `${hours}:${remainingMinutes}`
+}
+
+export function formatSeconds(seconds) {
+  const date = new Date()
+  date.setTime(Math.abs(seconds) * MILLISECONDS_IN_SECOND)
+  const utc = date.toUTCString()
+  return utc.substring(utc.indexOf(':') - 2, utc.indexOf(':') + 6)
 }

@@ -1,11 +1,17 @@
 <script setup>
-import { ref } from 'vue'
-import { isTimelineItemValid, validateSelectOptions } from '@/validators'
+import { NULLABLE_ACTIVITY } from '@/constants'
+import {
+  isTimelineItemValid,
+  validateSelectOptions,
+  isActivityValid,
+  validateActivities
+} from '@/validators'
 
 import BaseSelect from './BaseSelect.vue'
 import TimelineHour from './TimelineHour.vue'
+import TimelineStopwatch from './TimelineStopwatch.vue'
 
-defineProps({
+const props = defineProps({
   timelineItem: {
     type: Object,
     required: true,
@@ -15,19 +21,36 @@ defineProps({
     required: true,
     type: Array,
     validator: validateSelectOptions
+  },
+  activities: {
+    required: true,
+    type: Array,
+    validator: validateActivities
   }
 })
 
-const selectActivityId = ref(0)
+const emit = defineEmits({
+  selectActivity: isActivityValid
+})
+
+function selectActivity(id) {
+  emit('selectActivity', findActivityById(id))
+}
+
+function findActivityById(id) {
+  return props.activities.find((activity) => activity.id === id) || NULLABLE_ACTIVITY
+}
 </script>
+
 <template>
   <li class="relative flex flex-col gap-2 border-t border-gray-200 py-10 px-4">
     <TimelineHour :hour="timelineItem.hour" />
     <BaseSelect
-      :selected="selectActivityId"
+      :selected="timelineItem.activityId"
       :options="activitySelectOptions"
       placeholder="Rest"
-      @select="selectActivityId = $event"
+      @select="selectActivity"
     />
+    <TimelineStopwatch :seconds="timelineItem.activitySeconds" />
   </li>
 </template>
