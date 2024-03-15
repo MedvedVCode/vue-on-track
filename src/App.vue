@@ -29,6 +29,7 @@ const deleteActivity = (activity) => {
   timelineItems.value.forEach((timelineItem) => {
     if (timelineItem.activityId === activity.id) {
       timelineItem.activityId = null
+      timelineItem.activitySeconds = 0
     }
   })
   activities.value.splice(activities.value.indexOf(activity), 1)
@@ -53,6 +54,7 @@ function setActivitySecondsToComplete(activity, secondsToComplete) {
       :activity-select-options="activitySelectOptions"
       :activities="activities"
       @set-timeline-item-activity="setTimelineItemActivity"
+      :current-page="currentPage"
     />
     <TheActivities
       v-show="currentPage === PAGE_ACTIVITIES"
