@@ -7,7 +7,8 @@ import {
   validateActivities,
   isTimelineItemValid,
   isActivityValid,
-  isPageValid
+  isPageValid,
+  isNumber
 } from '@/validators'
 import TimelineItem from '@/components/TimelineItem.vue'
 
@@ -39,23 +40,32 @@ const timelineItemRefs = ref([])
 watchPostEffect(async () => {
   if (props.currentPage === PAGE_TIMELINE) {
     await nextTick()
-    scrollToHour(new Date().getHours())
+    scrollToHour(null)
   }
 })
 
-function scrollToHour(hour) {
+function scrollToHour(hour = null, isSmooth = true) {
+  hour ??= new Date().getHours()
+  const options = {
+    behavior: isSmooth ? 'smooth' : 'instant'
+  }
   if (hour === MIDNIGHT_HOUR) {
-    document.body.scrollIntoView({ behavior: 'smooth' })
+    document.body.scrollIntoView(options)
   } else {
-    timelineItemRefs.value[hour - 1].$el.scrollIntoView({ behavior: 'smooth' })
+    timelineItemRefs.value[hour - 1].$el.scrollIntoView(options)
   }
 }
 
 const emit = defineEmits({
   setTimelineItemActivity(timelineItem, activity) {
     return [isTimelineItemValid(timelineItem), isActivityValid(activity)].every(Boolean)
+  },
+  updateTimelineActivitySeconds(timelineItem, activitySeconds) {
+    return [isTimelineItemValid(timelineItem), isNumber(activitySeconds)].every(Boolean)
   }
 })
+
+defineExpose({ scrollToHour })
 </script>
 
 <template>
@@ -70,6 +80,7 @@ const emit = defineEmits({
         @select-activity="emit('setTimelineItemActivity', timelineItem, $event)"
         ref="timelineItemRefs"
         @scroll-to-hour="scrollToHour"
+        @update-activity-seconds="emit('updateTimelineActivitySeconds', timelineItem, $event)"
       />
     </ul>
   </div>
