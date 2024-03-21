@@ -1,20 +1,20 @@
 <script setup>
 import { computed } from 'vue'
 import { XMarkIcon } from '@heroicons/vue/24/outline'
-import { validateSelectOptions, isUndefinedOrNull, isSelectValueValid } from '@/validators'
+import { isUndefinedOrNull, isSelectValueValid, validateSelectOptions } from '@/validators'
 import { normalizaSelectValue } from '@/functions'
 
 import BaseButton from './BaseButton.vue'
 import { BUTTON_TYPE_NEUTRAL } from '@/constants'
 
 const props = defineProps({
+  placeholder: { type: String, default: 'Rest' },
+  selected: [String, Number],
   options: {
     type: Array,
     required: true,
     validator: validateSelectOptions
-  },
-  placeholder: { type: String, default: 'Rest' },
-  selected: [String, Number]
+  }
 })
 
 const emit = defineEmits({

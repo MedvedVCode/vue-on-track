@@ -1,14 +1,23 @@
-<script setup></script>
-<script>
-export default {
-  inheritAttrs: false
-}
+<script setup>
+import { computed } from 'vue'
+import { navigate, currentPage } from '@/router'
+import { isNavItemValid } from '@/validators'
+
+const classes = computed(() => [
+  'flex flex-col text-sx items-center capitalize p-2',
+  { 'bg-gray-200 pointer-events-none': currentPage.value === props.navItem.page }
+])
+
+const props = defineProps({
+  navItem: { type: Object, required: true, validator: isNavItemValid }
+})
 </script>
 
 <template>
   <li class="flex-1">
-    <a class="flex flex-col text-sx items-center capitalize p-2" v-bind="$attrs">
-      <slot></slot>
+    <a :href="`#${navItem.page}`" @click="navigate(navItem.page)" :class="classes">
+      <component :is="navItem.icon" class="h-6 w-6" />
+      {{ navItem.page }}
     </a>
   </li>
 </template>

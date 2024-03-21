@@ -1,23 +1,13 @@
 import {
-  PAGE_TIMELINE,
   HOURS_IN_DAY,
   SECONDS_IN_HOUR,
   SECONDS_IN_MINUTE,
   MINUTES_IN_HOUR,
   MILLISECONDS_IN_SECOND
 } from '@/constants'
-import { isPageValid, isNull } from './validators'
-
-export const normalizePageHash = () => {
-  const page = window.location.hash.slice(1)
-  if (isPageValid(page)) return page
-  window.location.hash = PAGE_TIMELINE
-  return PAGE_TIMELINE
-}
+import { isNull } from './validators'
 
 export function getTotalActivitySeconds(activity, timelineItems) {
-  console.log(timelineItems)
-  console.log(activity)
   return timelineItems
     .filter((timelineItem) => timelineItem.activityId === activity.id)
     .reduce(
@@ -54,7 +44,10 @@ export function normalizaSelectValue(value) {
   return isNull(value) || isNaN(value) ? value : +value
 }
 
-export function generatePeriodSelectOptions(periodsInMinutes) {
+export function generatePeriodSelectOptions() {
+  const periodsInMinutes = [
+    15, 30, 45, 60, 75, 90, 120, 150, 180, 210, 240, 270, 300, 330, 360, 390, 420, 480
+  ]
   return periodsInMinutes.map((minutes) => ({
     value: minutes * SECONDS_IN_MINUTE,
     label: generatePeriodSelectOptionsLabel(minutes)
@@ -74,4 +67,8 @@ export function formatSeconds(seconds) {
   date.setTime(Math.abs(seconds) * MILLISECONDS_IN_SECOND)
   const utc = date.toUTCString()
   return utc.substring(utc.indexOf(':') - 2, utc.indexOf(':') + 6)
+}
+
+export function currentHour() {
+  return new Date().getHours()
 }
