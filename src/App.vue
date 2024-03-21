@@ -5,14 +5,12 @@ import { generatePeriodSelectOptions } from './functions'
 import { currentPage, timelineRef } from './router'
 import * as keys from './keys'
 import {
-  timelineItems,
   updateTimelineItemActivitySeconds,
   setTimelineItemActivity,
   resetTimelineItemActivities
 } from './timeline-items'
 
 import {
-  activities,
   activitySelectOptions,
   createActivity,
   deleteActivity,
@@ -41,12 +39,8 @@ provide(keys.activitySelectOptionsKey, readonly(activitySelectOptions))
   <TheHeader />
 
   <main class="flex grow flex-col">
-    <TheTimeline
-      v-show="currentPage === PAGE_TIMELINE"
-      :timeline-items="timelineItems"
-      ref="timelineRef"
-    />
-    <TheActivities v-show="currentPage === PAGE_ACTIVITIES" :activities="activities" />
+    <TheTimeline v-show="currentPage === PAGE_TIMELINE" ref="timelineRef" />
+    <TheActivities v-show="currentPage === PAGE_ACTIVITIES" />
     <TheProgress v-show="currentPage === PAGE_PROGRESS" />
   </main>
 
