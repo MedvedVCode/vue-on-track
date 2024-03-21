@@ -1,23 +1,28 @@
-import { ref, computed, inject } from 'vue'
-import { generateActivitySelectOptions, generateActivities } from './functions'
-import { timelineItemsKey } from './keys'
+import { ref, computed } from 'vue'
+import { SECONDS_IN_HOUR } from './constants'
+import { id } from './functions'
 
 export const activities = ref(generateActivities())
-export const activitySelectOptions = computed(() => generateActivitySelectOptions(activities.value))
-const timelineItems = inject(timelineItemsKey)
+export const activitySelectOptions = computed(() => generateActivitySelectOptions())
 export const createActivity = (activity) => {
   activities.value.push(activity)
 }
 export const deleteActivity = (activity) => {
-  timelineItems.value.forEach((timelineItem) => {
-    if (timelineItem.activityId === activity.id) {
-      timelineItem.activityId = null
-      timelineItem.activitySeconds = 0
-    }
-  })
   activities.value.splice(activities.value.indexOf(activity), 1)
 }
 
 export function setActivitySecondsToComplete(activity, secondsToComplete) {
   activity.secondsToComplete = secondsToComplete || 0
+}
+
+function generateActivitySelectOptions() {
+  return activities.value.map((activity) => ({ label: activity.name, value: activity.id }))
+}
+
+function generateActivities() {
+  return ['Coding', 'Training', 'Reading'].map((name, hours) => ({
+    id: id(),
+    name,
+    secondsToComplete: hours * SECONDS_IN_HOUR
+  }))
 }
