@@ -18,7 +18,7 @@ const props = defineProps({
 <template>
   <li class="flex-1">
     <a :href="`#${navItem.page}`" @click="navigate(navItem.page)" :class="classes">
-      <BaseIcon :name="navItem.icon" class="h-6 w-6" />
+      <BaseIcon :name="navItem.icon" :classes="'h-6 w-6'" />
       {{ navItem.page }}
     </a>
   </li>

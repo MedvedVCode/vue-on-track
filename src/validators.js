@@ -1,4 +1,5 @@
 import { NAV_ITEMS, HOURS_IN_DAY, MIDNIGHT_HOUR, BUTTON_TYPES } from './constants'
+import { ICONS } from './icons'
 
 export function isPageValid(page) {
   return NAV_ITEMS.some((item) => item.page === page)
@@ -59,8 +60,12 @@ export function isActivityValid({ id, name, secondsToComplete }) {
   return [isNotEmptyString(id), isNotEmptyString(name), isNumber(secondsToComplete)].every(Boolean)
 }
 
-function isNotEmptyString(value) {
+export function isNotEmptyString(value) {
   return isString(value) && value.length > 0
 }
 
 export const isButtonTypeValid = (type) => BUTTON_TYPES.includes(type)
+
+export function isIconValid(icon) {
+  return Object.keys(ICONS).includes(icon)
+}

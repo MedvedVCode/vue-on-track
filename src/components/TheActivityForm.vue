@@ -2,6 +2,7 @@
 import { ref, nextTick } from 'vue'
 import { id } from '@/functions'
 import { createActivity } from '@/activities'
+import { ICON_PLUS } from '@/icons'
 
 import BaseIcon from './BaseIcon.vue'
 import BaseButton from '@/components/BaseButton.vue'
@@ -28,7 +29,8 @@ async function submit() {
       placeholder="Add an activity"
     />
     <BaseButton :disabled="name.trim() === ''">
-      <BaseIcon name="Plus" class="h-8" />
+      <BaseIcon :name="ICON_PLUS" />
     </BaseButton>
   </form>
 </template>
+../icons
