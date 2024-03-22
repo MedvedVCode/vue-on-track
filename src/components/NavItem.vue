@@ -3,6 +3,8 @@ import { computed } from 'vue'
 import { navigate, currentPage } from '@/router'
 import { isNavItemValid } from '@/validators'
 
+import BaseIcon from './BaseIcon.vue'
+
 const classes = computed(() => [
   'flex flex-col text-sx items-center capitalize p-2',
   { 'bg-gray-200 pointer-events-none': currentPage.value === props.navItem.page }
@@ -16,7 +18,7 @@ const props = defineProps({
 <template>
   <li class="flex-1">
     <a :href="`#${navItem.page}`" @click="navigate(navItem.page)" :class="classes">
-      <component :is="navItem.icon" class="h-6 w-6" />
+      <BaseIcon :name="navItem.icon" class="h-6 w-6" />
       {{ navItem.page }}
     </a>
   </li>

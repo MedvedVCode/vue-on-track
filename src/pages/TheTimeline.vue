@@ -1,30 +1,15 @@
 <script setup>
-import { watchPostEffect, ref, nextTick } from 'vue'
-import { currentPage } from '@/router'
-import { MIDNIGHT_HOUR, PAGE_TIMELINE } from '@/constants'
-import { currentHour } from '@/functions'
-import { timelineItems } from '@/timeline-items'
+import { onActivated } from 'vue'
+import {
+  timelineItems,
+  scrollToHour,
+  scrollToCurrentHour,
+  timelineItemRefs
+} from '@/timeline-items'
 
 import TimelineItem from '@/components/TimelineItem.vue'
 
-const timelineItemRefs = ref([])
-
-watchPostEffect(async () => {
-  if (currentPage.value === PAGE_TIMELINE) {
-    await nextTick()
-    scrollToHour(null, false)
-  }
-})
-
-function scrollToHour(hour = null, isSmooth = true) {
-  hour ??= currentHour()
-  const el = hour === MIDNIGHT_HOUR ? document.body : timelineItemRefs.value[hour - 1].$el
-  el.scrollIntoView({
-    behavior: isSmooth ? 'smooth' : 'instant'
-  })
-}
-
-defineExpose({ scrollToHour })
+onActivated(scrollToCurrentHour)
 </script>
 
 <template>
